@@ -1,8 +1,8 @@
 {
-  "name": "trendsenfoni-client",
+  "name": "trendsenfoni-reportapp",
   "version": "0.1.0",
   "private": false,
-  "description": "Trend Senfoni Business Report App",
+  "description": "TrendSenfoni Business Report App",
   "homepage": "https://aliabi.org",
   "repository": "https://github.com/aliabi-org/trendsenfoni",
   "bugs": {
