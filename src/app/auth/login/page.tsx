@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { Button } from '@/components/ui/button'
-import { useRouter, redirect, RedirectType } from 'next/navigation'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -12,14 +11,12 @@ import MagicLinkSignIn from '../(components)/magic-link-signin'
 import EmailPasswordSignIn from '../(components)/email-password-signin'
 import SSOSignIn from '../(components)/sso-signin'
 import { toast } from "sonner"
-import { postItem } from '@/lib/fetch'
-import Loading from '@/components/loading'
-
-// export const metadata: Metadata = pageMeta('Login')
 
 
 
 const LoginPage = () => {
+
+
   return (<div className='grid grid-cols-1 md:grid-cols-2'>
     <div className="hidden h-full  lg:flex flex-row justify-center  items-center">
       <AppIntroduce />
