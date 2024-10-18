@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from '@/components/ui/input'
 import { postItem } from '@/lib/fetch'
 import { useRouter } from 'next/navigation'
+import Cookies from 'js-cookie'
 
 interface MagicLinkSignInProps {
   // email?: string,
@@ -22,8 +23,10 @@ export default function MagicLinkSignIn({
   const router = useRouter()
   const [email, setEmail] = useState('')
   const loginWithMagicLink = () => {
+    const deviceId = Cookies.get('deviceId')
     postItem('/auth/magicLink', '', {
       email: email,
+      deviceId: deviceId,
       web: 'aliabi.org',
       callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/magicLink`
     })

@@ -141,6 +141,7 @@ export function SqlConnection() {
                   </SelectTrigger>
                   <SelectContent position="popper">
                     <SelectItem value="mikro_v16">Mikro V16</SelectItem>
+                    <SelectItem value="mikro_v17">Mikro V17 (Desktop)</SelectItem>
                     <SelectItem value="eta_v8">Eta V8 SQL</SelectItem>
                     <SelectItem value="logo_go">Logo Go</SelectItem>
                     <SelectItem value="logo_tiger">Logo Tiger</SelectItem>

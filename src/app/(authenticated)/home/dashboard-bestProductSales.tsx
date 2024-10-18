@@ -98,7 +98,7 @@ export function DashboardBestProductSales() {
               <div className='text-right text-blue-600'>{moneyFormat(e.Satis, 0)}</div>
               <div className='text-right text-orange-600'>{moneyFormat(e.Maliyet, 0)}</div>
               <div className='text-right text-green-600 font-semibold'>{moneyFormat(e.Kar, 0)}</div>
-              <div className='text-right text-purple-600 font-semibold w-14'>%{Math.round(10 * (e.KarOran || 0) * 100) / 10}</div>
+              <div className='text-right text-purple-600 font-semibold w-14 md:w-20'>%{Math.round(10 * (e.KarOran || 0) * 100) / 10}</div>
             </div>
           </div>
 

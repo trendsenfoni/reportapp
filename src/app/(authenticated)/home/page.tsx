@@ -23,7 +23,7 @@ export default function Home() {
         <Button variant={'outline'} onClick={() => setReport('bestProductSales')}><i className="fa-solid fa-chart-bar me-2"></i> En Çok Satanlar</Button>
 
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+      <div className='grid grid-cols-1  gap-4'>
         {report == 'caseBank' && <><DashboardCashBalances /><DashboardBankBalances /></>}
         {report == 'storeSales' && <><DashboardStoreSales /></>}
         {report == 'productMainGroupSales' && <><DashboardProductMainGroupSales /></>}

@@ -45,6 +45,9 @@ export function DashboardStoreSales() {
         if (t.Maliyet! > 0) {
           t.Kar = t.Satis! - t.Maliyet!
           t.KarOran = t.Kar / t.Maliyet!
+        } else {
+          t.Kar = t.Satis!
+          t.KarOran = 1
         }
         setTotal(t)
       })
@@ -105,7 +108,7 @@ export function DashboardStoreSales() {
             <div className='text-right text-blue-600'>{moneyFormat(e.Satis, 0)}</div>
             <div className='text-right text-orange-600'>{moneyFormat(e.Maliyet, 0)}</div>
             <div className='text-right text-green-600 font-semibold'>{moneyFormat(e.Kar, 0)}</div>
-            <div className='text-right text-purple-600 font-semibold w-14'>%{Math.round(10 * (e.KarOran || 0) * 100) / 10}</div>
+            <div className='text-right text-purple-600 font-semibold w-14 md:w-20'>%{Math.round(10 * (e.KarOran || 0) * 100) / 10}</div>
           </div>
         ))}
         {!loading && total && (<div>
@@ -115,7 +118,7 @@ export function DashboardStoreSales() {
             <div className='text-right text-blue-600'>{moneyFormat(total.Satis, 0)}</div>
             <div className='text-right text-orange-600'>{moneyFormat(total.Maliyet, 0)}</div>
             <div className='text-right text-green-600'>{moneyFormat(total.Kar, 0)}</div>
-            <div className='text-right text-purple-600 w-14'>%{Math.round(10 * (total.KarOran || 0) * 100) / 10}</div>
+            <div className='text-right text-purple-600 w-14 md:w-20'>%{Math.round(10 * (total.KarOran || 0) * 100) / 10}</div>
           </div>
         </div>)}
       </CardContent>
