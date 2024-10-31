@@ -16,7 +16,7 @@ export default function LayoutClientSide() {
     setDeviceId(newDeviceId)
     Cookies.set('deviceId', newDeviceId)
   }
-  if (Cookies.get('token') && pathName.startsWith('/auth')) {
+  if (Cookies.get('token') && (pathName.startsWith('/auth') || pathName == '/')) {
     router.push('/home')
   }
 

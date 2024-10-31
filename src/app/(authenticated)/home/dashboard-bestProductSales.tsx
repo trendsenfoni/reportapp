@@ -18,6 +18,8 @@ interface ProductSalesType {
   Kod?: string
   Isim?: string
   Satis?: number
+  Vergi?: number
+  NetSatis?: number
   Maliyet?: number
   Kar?: number
   KarOran?: number
@@ -68,21 +70,23 @@ export function DashboardBestProductSales() {
         {/* <CardDescription>10 Ekim 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex flex-col w-full pb-0 gap-2 px-2">
-        <div className='grid grid-cols-5 w-full text-xs sm:text-base'>
+        <div className='grid grid-cols-6 w-full text-xs sm:text-base'>
           <div className='text-ellipsis text-nowrap'>Ürün</div>
           <div className='text-right '>Satış</div>
           <div className='text-right '>Maliyet</div>
           <div className='text-right '>Kar</div>
           <div className='text-right w-14'>% Kar</div>
+          <div className='text-right '>Net Satış</div>
         </div>
         {loading && Array.from(Array(5).keys()).map(e => (
           <div key={e} className='flex'>
-            <div className='grid grid-cols-5 w-full gap-2'>
+            <div className='grid grid-cols-6 w-full gap-2'>
               <Skeleton className="h-4 " />
               <Skeleton className="h-4 bg-blue-600" />
               <Skeleton className="h-4 bg-orange-600" />
               <Skeleton className="h-4 bg-green-600" />
               <Skeleton className="h-4 bg-purple-600 w-14" />
+              <Skeleton className="h-4 bg-slate-600" />
             </div>
 
           </div>
@@ -93,12 +97,13 @@ export function DashboardBestProductSales() {
             <div className='text-ellipsis text-nowrap text-sm'>
               {e.Isim}
             </div>
-            <div className='grid grid-cols-5 w-full text-xs sm:text-base'>
+            <div className='grid grid-cols-6 w-full text-xs sm:text-base'>
               <div className='text-ellipsis text-nowrap text-gray-500'>{e.Kod}</div>
               <div className='text-right text-blue-600'>{moneyFormat(e.Satis, 0)}</div>
               <div className='text-right text-orange-600'>{moneyFormat(e.Maliyet, 0)}</div>
               <div className='text-right text-green-600 font-semibold'>{moneyFormat(e.Kar, 0)}</div>
               <div className='text-right text-purple-600 font-semibold w-14 md:w-20'>%{Math.round(10 * (e.KarOran || 0) * 100) / 10}</div>
+              <div className='text-right text-slate-500'>{moneyFormat(e.NetSatis, 0)}</div>
             </div>
           </div>
 
