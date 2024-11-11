@@ -85,8 +85,8 @@ export function DashboardStoreSales() {
         {/* <CardDescription>10 Ekim 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex flex-col w-full pb-0 gap-2 px-2">
-        <div className='grid grid-cols-6 w-full text-xs sm:text-base'>
-          <div className='text-ellipsis text-nowrap'>Mağaza</div>
+        <div className='grid grid-cols-5 w-full text-xs sm:text-base'>
+          {/* <div className='text-ellipsis text-nowrap'>Mağaza</div> */}
           <div className='text-right '>Satış</div>
           <div className='text-right '>Maliyet</div>
           <div className='text-right '>Kar</div>
@@ -95,8 +95,8 @@ export function DashboardStoreSales() {
         </div>
         {loading && Array.from(Array(5).keys()).map(e => (
           <div key={e} className='flex mb-4'>
-            <div className='grid grid-cols-6 w-full gap-2'>
-              <Skeleton className="h-5 " />
+            <div className='grid grid-cols-5 w-full gap-2'>
+              {/* <Skeleton className="h-5 " /> */}
               <Skeleton className="h-5 bg-blue-600" />
               <Skeleton className="h-5 bg-orange-600" />
               <Skeleton className="h-5 bg-green-600" />
@@ -108,19 +108,24 @@ export function DashboardStoreSales() {
         ))}
 
         {!loading && list.map((e, index) => (
-          <div key={e.Magaza} className={`grid grid-cols-6 w-full text-xs sm:text-base  ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
-            <div className='text-ellipsis text-nowrap'>{e.Magaza}</div>
-            <div className='text-right text-blue-600'>{moneyFormat(e.Satis, 0)}</div>
-            <div className='text-right text-orange-600'>{moneyFormat(e.Maliyet, 0)}</div>
-            <div className='text-right text-green-600 font-semibold'>{moneyFormat(e.Kar, 0)}</div>
-            <div className='text-right text-purple-600 font-semibold w-14 md:w-20'>%{Math.round(10 * (e.KarOran || 0) * 100) / 10}</div>
-            <div className='text-right text-slate-500'>{moneyFormat(e.NetSatis, 0)}</div>
+          <div key={e.Magaza} className={`flex flex-col ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
+            <div className='text-ellipsis text-nowrap text-xs sm:text-base'>
+              {e.Magaza}
+            </div>
+            <div key={e.Magaza} className={`grid grid-cols-5 w-full text-xs sm:text-base  ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
+              <div className='text-right text-blue-600'>{moneyFormat(e.Satis, 0)}</div>
+              <div className='text-right text-orange-600'>{moneyFormat(e.Maliyet, 0)}</div>
+              <div className='text-right text-green-600 font-semibold'>{moneyFormat(e.Kar, 0)}</div>
+              <div className='text-right text-purple-600 font-semibold w-14 md:w-20'>%{Math.round(10 * (e.KarOran || 0) * 100) / 10}</div>
+              <div className='text-right text-slate-500'>{moneyFormat(e.NetSatis, 0)}</div>
+            </div>
           </div>
         ))}
-        {!loading && total && (<div>
-          {/* <hr /> */}
-          <div key={'total'} className='grid grid-cols-6 w-full text-xs sm:text-base font-bold bg-blue-500 bg-opacity-20 rounded-md py-1 border border-dashed border-gray-500'>
-            <div className='text-ellipsis text-nowrap'></div>
+        {!loading && total && (<div className='mt-4'>
+          <div className='text-center text-xs sm:text-base'>
+            TOPLAM
+          </div>
+          <div key={'total'} className='grid grid-cols-5 w-full text-xs sm:text-base font-bold bg-blue-500 bg-opacity-20 rounded-md py-1 border border-dashed border-gray-500'>
             <div className='text-right text-blue-600'>{moneyFormat(total.Satis, 0)}</div>
             <div className='text-right text-orange-600'>{moneyFormat(total.Maliyet, 0)}</div>
             <div className='text-right text-green-600'>{moneyFormat(total.Kar, 0)}</div>

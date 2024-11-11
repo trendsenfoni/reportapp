@@ -12,44 +12,29 @@ import { previousDay } from 'date-fns'
 import { Skeleton } from "@/components/ui/skeleton"
 
 import Loading from '@/components/loading'
+import { DashboardCashSummary } from './dashboard-cash-summary'
 
-interface CashBalanceSummaryType {
-  ID?: string
+interface CashBalanceType {
+  kas_tip?: string
+  Turu?: string
+  Kod?: string
+  Isim?: string
   Bakiye?: number
   ParaBirimi?: string
 }
 
-interface CashBalanceGroupType {
-  nakit: CashBalanceSummaryType[]
-  cek: CashBalanceSummaryType[]
-  karsiliksizCek: CashBalanceSummaryType[]
-  senet: CashBalanceSummaryType[]
-  protestoluSenet: CashBalanceSummaryType[]
-  verilenSenet: CashBalanceSummaryType[]
-  verilenOdemeEmirleri: CashBalanceSummaryType[]
-  musteriOdemeSozleri: CashBalanceSummaryType[]
-}
 
 export function DashboardCashBalances() {
   const [token, setToken] = useState('')
   const [lastDate, setLastDate] = useState(yesterday())
-  const [balances, setBalances] = useState<CashBalanceGroupType>({
-    nakit: [],
-    cek: [],
-    karsiliksizCek: [],
-    senet: [],
-    protestoluSenet: [],
-    verilenSenet: [],
-    verilenOdemeEmirleri: [],
-    musteriOdemeSozleri: [],
-  })
+  const [balances, setBalances] = useState<CashBalanceType[]>([])
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
 
   const load = (tarih?: string) => {
     setLoading(true)
-    getList(`/reports/cashBalances/summary?lastDate=${tarih || lastDate}`, token)
-      .then((result: CashBalanceGroupType) => {
+    getList(`/reports/cashBalances?lastDate=${tarih || lastDate}`, token)
+      .then((result: CashBalanceType[]) => {
         console.log('result:', result)
         setBalances(result)
       })
@@ -65,21 +50,25 @@ export function DashboardCashBalances() {
         <CardTitle className='flex flex-row w-full border-b mb-2 pb-2  items-center justify-between'>
           <div>Kasalar</div>
           <div className='text-sm text-gray-400'>
-            <Input
+            {/* <Input
               type='date'
               disabled={loading}
               pattern='yyyy-mm-dd' defaultValue={lastDate} onChange={e => {
                 setLastDate(e.target.value)
                 load(e.target.value)
-              }} />
+              }} /> */}
           </div>
         </CardTitle>
         {/* <CardDescription>10 Ekim 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex flex-col w-full pb-0 gap-2 px-2">
-        {loading && Array.from(Array(5).keys()).map(e => (
-          <div key={e} className='flex'>
-            <div className='grid grid-cols-3 w-full gap-4'>
+        {/* <div className='grid grid-cols-6 w-full text-xs sm:text-base'>
+          <div className=''>Kasa</div>
+          <div className='text-right w-18'>Bakiye</div>
+        </div> */}
+        {loading && Array.from(Array(8).keys()).map(e => (
+          <div key={e} className='flex mb-4'>
+            <div className='grid grid-cols-3 w-full gap-2'>
               <Skeleton className="col-span-2 h-5" />
               <Skeleton className="col-span-1 h-5 bg-blue-600" />
             </div>
@@ -87,67 +76,19 @@ export function DashboardCashBalances() {
           </div>
         ))}
 
-        {/* Nakit Kasalar */}
-        {!loading && balances.nakit.map(e => (
-          <div key={e.ID} className='grid grid-cols-2 w-full'>
-            <div>Nakit {currSymbol(e.ParaBirimi)}</div>
-            <div className='text-right text-blue-600 font-semibold'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
+        {!loading && balances.map((e, index) => (
+          <div key={e.Kod} className={`grid grid-cols-3 items-center w-full text-xs sm:text-base ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
+            <div className='col-span-2 flex flex-col gap-0 p-0'>
+              <span>{e.Kod} - {e.Isim}</span>
+              <span className='text-[9px] text-gray-500'>{e.Turu}</span>
+            </div>
+            <div className='text-right text-blue-600'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
           </div>
         ))}
 
-        {/* Cek Kasalari */}
-        {!loading && balances.cek.map(e => (
-          <div key={e.ID} className='grid grid-cols-2 w-full'>
-            <div>Çek {currSymbol(e.ParaBirimi)}</div>
-            <div className='text-right text-blue-600 font-semibold'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
-          </div>
-        ))}
-
-        {/* Senet Kasalari */}
-        {!loading && balances.senet.map(e => (
-          <div key={e.ID} className='grid grid-cols-2 w-full'>
-            <div>Senet {currSymbol(e.ParaBirimi)}</div>
-            <div className='text-right text-blue-600 font-semibold'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
-          </div>
-        ))}
-        {/* Musteri Odeme Sozleri */}
-        {!loading && balances.musteriOdemeSozleri.map(e => e.Bakiye && e.Bakiye > 0 && (
-          <div key={e.ID} className='grid grid-cols-2 w-full'>
-            <div>Müşteri Ödeme Sözleri {currSymbol(e.ParaBirimi)}</div>
-            <div className='text-right text-blue-600 font-semibold'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
-          </div>
-        ))}
-        {!loading && balances.verilenOdemeEmirleri.length > 0 && balances.verilenSenet.length > 0 && <hr />}
-        {/* Verilen Ödeme Emirleri */}
-        {!loading && balances.verilenOdemeEmirleri.map(e => e.Bakiye && e.Bakiye > 0 && (
-          <div key={e.ID} className='grid grid-cols-2 w-full'>
-            <div>Verilen Ödeme Emirleri {currSymbol(e.ParaBirimi)}</div>
-            <div className='text-right text-blue-600 font-semibold'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
-          </div>
-        ))}
-        {/* Verilen Senet */}
-        {!loading && balances.verilenSenet.map(e => e.Bakiye && e.Bakiye > 0 && (
-          <div key={e.ID} className='grid grid-cols-2 w-full'>
-            <div>Verilen Senet {currSymbol(e.ParaBirimi)}</div>
-            <div className='text-right text-blue-600 font-semibold'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
-          </div>
-        ))}
-        {!loading && balances.karsiliksizCek.length > 0 && balances.protestoluSenet.length > 0 && <hr />}
-        {/* Karsiliksiz Cek Kasalari */}
-        {!loading && balances.karsiliksizCek.map(e => e.Bakiye && e.Bakiye > 0 && (
-          <div key={e.ID} className='grid grid-cols-2 w-full'>
-            <div>Karşılıksız Çek {currSymbol(e.ParaBirimi)}</div>
-            <div className='text-right text-blue-600 font-semibold'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
-          </div>
-        ))}
-        {/* Protestolu Senet Kasalari */}
-        {!loading && balances.protestoluSenet.map(e => e.Bakiye && e.Bakiye > 0 && (
-          <div key={e.ID} className='grid grid-cols-2 w-full'>
-            <div>Protestolu Senet {currSymbol(e.ParaBirimi)}</div>
-            <div className='text-right text-blue-600 font-semibold'>{moneyFormat(e.Bakiye, 0)} {currSymbol(e.ParaBirimi)}</div>
-          </div>
-        ))}
-
+        {!loading && (<div>
+          <DashboardCashSummary />
+        </div>)}
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
 

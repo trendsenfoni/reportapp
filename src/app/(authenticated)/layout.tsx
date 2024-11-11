@@ -32,7 +32,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
     <div className="flex min-h-screen w-full flex-col px-2">
       <DashboardHeader />
       <div className='my-2'></div>
-      <div className="flex-1 md:border border-dashed border-opacity-25 rounded-md border-yellow-400 " style={{ overflowWrap: 'anywhere' }}>
+      <div className="flex-1 md:border border-dashed border-opacity-25 md:p-4 rounded-md border-yellow-400 " style={{ overflowWrap: 'anywhere' }}>
         {/* <div className='conta11iner fl11ex py-4 w-full'> */}
         {/* <SideMenu>
             {children}
