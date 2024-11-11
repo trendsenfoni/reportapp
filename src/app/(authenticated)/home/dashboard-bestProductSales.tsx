@@ -93,7 +93,7 @@ export function DashboardBestProductSales() {
         ))}
 
         {!loading && list.map((e, index) => (
-          <div key={e.Kod} className={`flex flex-col ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
+          <div key={e.Kod} className={`flex flex-col  ${index % 2 == 0 ? ' bg-blue-500 bg-opacity-10' : 'bg-secondary bg-opacity-10'} py-1 ps-1`}>
             <div className='text-ellipsis text-nowrap text-sm'>
               {e.Isim}
             </div>

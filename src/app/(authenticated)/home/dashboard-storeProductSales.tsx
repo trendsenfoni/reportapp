@@ -14,8 +14,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Loading from '@/components/loading'
 import { Button } from '@/components/ui/button'
 
-interface ProductMainGroupSalesType {
-  AnaGrup?: string
+interface ProductSalesType {
+  Kod?: string
+  Isim?: string
   Satis?: number
   Vergi?: number
   NetSatis?: number
@@ -24,20 +25,24 @@ interface ProductMainGroupSalesType {
   KarOran?: number
 }
 
-export function DashboardProductMainGroupSales() {
+interface Props {
+  store?: string
+  storeName?: string
+}
+export function DashboardStoreProductSales({ store, storeName }: Props) {
   const [token, setToken] = useState('')
   const [startDate, setStartDate] = useState(yesterday())
   const [endDate, setEndDate] = useState(yesterday())
-  const [list, setList] = useState<ProductMainGroupSalesType[]>([])
-  const [total, setTotal] = useState<ProductMainGroupSalesType>()
+  const [list, setList] = useState<ProductSalesType[]>([])
+  const [total, setTotal] = useState<ProductSalesType>()
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
 
   const load = () => {
     setLoading(true)
-    getList(`/reports/productMainGroupSales?startDate=${startDate}&endDate=${endDate}`, token)
-      .then((result: ProductMainGroupSalesType[]) => {
-        let t: ProductMainGroupSalesType = { Satis: 0, Maliyet: 0, AnaGrup: 'Toplam', NetSatis: 0, Kar: 0, KarOran: 0 }
+    getList(`/reports/storeProductSales?startDate=${startDate}&endDate=${endDate}&store=${store}`, token)
+      .then((result: ProductSalesType[]) => {
+        let t: ProductSalesType = { Satis: 0, Maliyet: 0, NetSatis: 0, Kar: 0, KarOran: 0 }
         setList(result)
         result.forEach(e => {
           t.Satis = t.Satis! + e.Satis!
@@ -63,7 +68,10 @@ export function DashboardProductMainGroupSales() {
     <Card className="flex flex-col w-full min-w-[340px]">
       <CardHeader className="items-center pb-0 px-1">
         <CardTitle className='flex flex-col s11m:f11lex-row items-ce11nter justify-be11tween w-full border-b mb-2 pb-2 gap-4'>
-          <div className='self-center text-xl'>Ürün Ana Grup Satış</div>
+          <div className='self-center text-xl flex flex-col items-center'>
+            <span>Mağaza Ürün Satış</span>
+            <span className='text-lg'>{store} - {storeName}</span>
+          </div>
           <div className='text-sm text-gray-400 flex w-full  justify-center '>
             <div className='flex w-f11ull justify-be11tween px-1 gap-2'>
               <Input className='px-2 py-1 w-26'
@@ -89,27 +97,28 @@ export function DashboardProductMainGroupSales() {
           <div className='text-right '>Maliyet</div>
           <div className='text-right '>Kar</div>
           <div className='text-right w-14'>% Kar</div>
-          <div className='text-right '>NetSatış</div>
+          <div className='text-right '>Net Satış</div>
         </div>
-        {loading && Array.from(Array(8).keys()).map(e => (
-          <div key={e} className='flex mb-4'>
+        {loading && Array.from(Array(5).keys()).map(e => (
+          <div key={e} className='flex'>
             <div className='grid grid-cols-5 w-full gap-2'>
-              <Skeleton className="h-5 bg-blue-600" />
-              <Skeleton className="h-5 bg-orange-600" />
-              <Skeleton className="h-5 bg-green-600" />
-              <Skeleton className="h-5 bg-purple-600 w-14" />
-              <Skeleton className="h-5 bg-slate-500" />
+              <Skeleton className="h-4 bg-blue-600" />
+              <Skeleton className="h-4 bg-orange-600" />
+              <Skeleton className="h-4 bg-green-600" />
+              <Skeleton className="h-4 bg-purple-600 w-14" />
+              <Skeleton className="h-4 bg-slate-600" />
             </div>
 
           </div>
         ))}
 
         {!loading && list.map((e, index) => (
-          <div key={e.AnaGrup} className={`flex flex-col  ${index % 2 == 0 ? ' bg-blue-500 bg-opacity-10' : 'bg-secondary bg-opacity-10'} py-1 ps-1`}>
-            <div className='text-ellipsis text-nowrap text-xs sm:text-base'>
-              {e.AnaGrup ? e.AnaGrup : '{BOŞ}'}
+          <div key={e.Kod} className={`flex flex-col ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
+            <div className='text-ellipsis text-sm flex gap-4'>
+              <span>{e.Isim}</span>
+              <span className='text-xs text-gray-500'>{e.Kod}</span>
             </div>
-            <div key={e.AnaGrup} className={`grid grid-cols-5 items-center w-full text-xs sm:text-base ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
+            <div className='grid grid-cols-5 w-full text-xs sm:text-base'>
               <div className='text-right text-blue-600'>{moneyFormat(e.Satis, 0)}</div>
               <div className='text-right text-orange-600'>{moneyFormat(e.Maliyet, 0)}</div>
               <div className='text-right text-green-600 font-semibold'>{moneyFormat(e.Kar, 0)}</div>
@@ -117,10 +126,11 @@ export function DashboardProductMainGroupSales() {
               <div className='text-right text-slate-500'>{moneyFormat(e.NetSatis, 0)}</div>
             </div>
           </div>
+
         ))}
         {!loading && total && (<div className='mt-4'>
           <div className='text-center text-xs sm:text-base'>
-            TOPLAM
+            TOPLAM : {store} - {storeName}
           </div>
           <div key={'total'} className={`grid grid-cols-5 w-full text-xs sm:text-base font-bold bg-blue-500 bg-opacity-20 rounded-md py-1 border border-dashed border-gray-500`}>
             <div className='text-right text-blue-600'>{moneyFormat(total.Satis, 0)}</div>
