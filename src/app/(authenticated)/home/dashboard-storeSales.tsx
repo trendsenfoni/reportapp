@@ -157,7 +157,7 @@ export function DashboardStoreSales() {
         <div className='absolute right-0 top-[-20px]'>
           <Link href="#" className='bg-slate-500 px-2 py-1 rounded-sm ' onClick={() => setMagazaNo('')}>X</Link>
         </div>
-        <DashboardStoreProductSales store={magazaNo} storeName={magaza} />
+        <DashboardStoreProductSales store={magazaNo} storeName={magaza} defaultStartDate={startDate} defaultEndDate={endDate} />
       </div>
     </>}
   </>)

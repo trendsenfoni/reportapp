@@ -28,11 +28,13 @@ interface ProductSalesType {
 interface Props {
   store?: string
   storeName?: string
+  defaultStartDate?: string
+  defaultEndDate?: string
 }
-export function DashboardStoreProductSales({ store, storeName }: Props) {
+export function DashboardStoreProductSales({ store, storeName, defaultStartDate, defaultEndDate }: Props) {
   const [token, setToken] = useState('')
-  const [startDate, setStartDate] = useState(yesterday())
-  const [endDate, setEndDate] = useState(yesterday())
+  const [startDate, setStartDate] = useState(defaultStartDate ? defaultStartDate : yesterday())
+  const [endDate, setEndDate] = useState(defaultEndDate ? defaultEndDate : yesterday())
   const [list, setList] = useState<ProductSalesType[]>([])
   const [total, setTotal] = useState<ProductSalesType>()
   const [loading, setLoading] = useState(false)
@@ -40,6 +42,8 @@ export function DashboardStoreProductSales({ store, storeName }: Props) {
 
   const load = () => {
     setLoading(true)
+    console.log('startDate:', startDate)
+    console.log('endDate:', endDate)
     getList(`/reports/storeProductSales?startDate=${startDate}&endDate=${endDate}&store=${store}`, token)
       .then((result: ProductSalesType[]) => {
         let t: ProductSalesType = { Satis: 0, Maliyet: 0, NetSatis: 0, Kar: 0, KarOran: 0 }
@@ -72,7 +76,8 @@ export function DashboardStoreProductSales({ store, storeName }: Props) {
             <span>Mağaza Ürün Satış</span>
             <span className='text-lg'>{store} - {storeName}</span>
           </div>
-          <div className='text-sm text-gray-400 flex w-full  justify-center '>
+
+          {!loading && <div className='text-sm text-gray-400 flex w-full  justify-center '>
             <div className='flex w-f11ull justify-be11tween px-1 gap-2'>
               <Input className='px-2 py-1 w-26'
                 type='date' disabled={loading} pattern='yyyy-mm-dd'
@@ -87,7 +92,7 @@ export function DashboardStoreProductSales({ store, storeName }: Props) {
             </div>
             <Button variant={'outline'} className='px-3 py-2'
               onClick={load}><i className="fa-solid fa-rotate"></i></Button>
-          </div>
+          </div>}
         </CardTitle>
         {/* <CardDescription>10 Ekim 2024</CardDescription> */}
       </CardHeader>
