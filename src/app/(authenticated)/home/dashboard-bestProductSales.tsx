@@ -23,6 +23,7 @@ interface ProductSalesType {
   Maliyet?: number
   Kar?: number
   KarOran?: number
+  Miktar?: number
 }
 
 export function DashboardBestProductSales() {
@@ -70,8 +71,7 @@ export function DashboardBestProductSales() {
         {/* <CardDescription>10 Ekim 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex flex-col w-full pb-0 gap-2 px-2">
-        <div className='grid grid-cols-6 w-full text-xs sm:text-base'>
-          <div className='text-ellipsis text-nowrap'>Ürün</div>
+        <div className='grid grid-cols-5 w-full text-xs sm:text-base'>
           <div className='text-right '>Satış</div>
           <div className='text-right '>Maliyet</div>
           <div className='text-right '>Kar</div>
@@ -80,8 +80,7 @@ export function DashboardBestProductSales() {
         </div>
         {loading && Array.from(Array(5).keys()).map(e => (
           <div key={e} className='flex'>
-            <div className='grid grid-cols-6 w-full gap-2'>
-              <Skeleton className="h-4 " />
+            <div className='grid grid-cols-5 w-full gap-2'>
               <Skeleton className="h-4 bg-blue-600" />
               <Skeleton className="h-4 bg-orange-600" />
               <Skeleton className="h-4 bg-green-600" />
@@ -93,12 +92,16 @@ export function DashboardBestProductSales() {
         ))}
 
         {!loading && list.map((e, index) => (
-          <div key={e.Kod} className={`flex flex-col  ${index % 2 == 0 ? ' bg-blue-500 bg-opacity-10' : 'bg-secondary bg-opacity-10'} py-1 ps-1`}>
-            <div className='text-ellipsis text-nowrap text-sm'>
-              {e.Isim}
+          <div key={e.Kod} className={`flex flex-col ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
+            <div className='text-ellipsis text-sm flex justify-between gap-4'>
+              <div className='flex items-center gap-2'>
+                <span>{e.Isim}</span>
+                <span className='text-xs text-gray-500'>  {e.Kod}</span>
+              </div>
+              <div className='text-blue-500 text-xs'>Mik:{e.Miktar}</div>
+
             </div>
-            <div className='grid grid-cols-6 w-full text-xs sm:text-base'>
-              <div className='text-ellipsis text-nowrap text-gray-500'>{e.Kod}</div>
+            <div className='grid grid-cols-5 w-full text-xs sm:text-base'>
               <div className='text-right text-blue-600'>{moneyFormat(e.Satis, 0)}</div>
               <div className='text-right text-orange-600'>{moneyFormat(e.Maliyet, 0)}</div>
               <div className='text-right text-green-600 font-semibold'>{moneyFormat(e.Kar, 0)}</div>

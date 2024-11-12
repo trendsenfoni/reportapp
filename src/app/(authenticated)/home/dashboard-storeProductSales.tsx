@@ -23,6 +23,7 @@ interface ProductSalesType {
   Maliyet?: number
   Kar?: number
   KarOran?: number
+  Miktar?: number
 }
 
 interface Props {
@@ -119,9 +120,13 @@ export function DashboardStoreProductSales({ store, storeName, defaultStartDate,
 
         {!loading && list.map((e, index) => (
           <div key={e.Kod} className={`flex flex-col ${index % 2 == 0 ? ' bg-slate-500 bg-opacity-10' : ''} py-1 ps-1`}>
-            <div className='text-ellipsis text-sm flex gap-4'>
-              <span>{e.Isim}</span>
-              <span className='text-xs text-gray-500'>{e.Kod}</span>
+            <div className='text-ellipsis text-sm flex justify-between gap-4'>
+              <div className='flex items-center gap-2'>
+                <span>{e.Isim}</span>
+                <span className='text-xs text-gray-500'>  {e.Kod}</span>
+              </div>
+              <div className='text-blue-500 text-xs'>Mik:{e.Miktar}</div>
+
             </div>
             <div className='grid grid-cols-5 w-full text-xs sm:text-base'>
               <div className='text-right text-blue-600'>{moneyFormat(e.Satis, 0)}</div>
